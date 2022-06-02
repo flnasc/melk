@@ -53,9 +53,9 @@ def parse_xml(xmlfile, csvfile, current_id):
 
 
 
-if len(sys.argv) == 4:
-    print("xml: ", sys.argv[1], " csv: ", sys.argv[2], " id: ", sys.argv[3])
-    parse_xml(sys.argv[1], sys.argv[2], sys.argv[3])
+#if len(sys.argv) == 4:
+#    print("xml: ", sys.argv[1], " csv: ", sys.argv[2], " id: ", sys.argv[3])
+#    parse_xml(sys.argv[1], sys.argv[2], sys.argv[3])
     
-else: 
-    parse_xml('./articles/2000_12.xml', './articles/2000_12.csv', 0)
+#else: 
+#    parse_xml('./articles/2000_12.xml', './articles/2000_12.csv', 0)

@@ -75,8 +75,8 @@ for cur_year in range(start_year, end_year+1):
         hits = one_month_meta_list['response']['meta']['hits']
 
         #limit to ten articles download for testing  
-        for i in range(100):
-        #for i in range(hits):s
+        for i in range(hits):
+        #for i in range(100):s
 
             logging.info("Writing Article: (" + str(cur_month) + "/"+ str(cur_year) + ") - "+ str(i) + " of " + str(hits))
 
