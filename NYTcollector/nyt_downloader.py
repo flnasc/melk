@@ -6,8 +6,6 @@ import logging
 import sys
 from requests_html import HTMLSession
 
-
-
 logging.basicConfig(filename='./nyt_log.txt',
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',

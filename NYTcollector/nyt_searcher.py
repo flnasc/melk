@@ -17,31 +17,29 @@ ARTICLES_PER_PAGE = 10
 #Returns a .csv file with data from articles discovered through the NYT Article Search API
 
 def download_articles(keyword, start_date, end_date):
-    #creates xml file(s?)
-
-    s = start_date
-    e = end_date
 
     #destination directory
     dest_dir = './articles/'
     file_prefix = 'nyt_articles_'
     file_extension = '.xml'
 
-    #create doc? 
-    doc = ET.Element("doc")
-
     #open output file (just one output file per search for this program, unlike NYT_downloader)
     #includes dates in case we want to do searches for same term with different dates
     filename_out = dest_dir + file_prefix + keyword + '_' + start_date.isoformat() + '_' + end_date.isoformat() + file_extension
     
+    #create element tree to go from JSON to XML 
+    doc = ET.Element("doc")
+
     #get each page of results from ArticleSearch
     results_page = 0
     next_page = True
     while next_page is True:
 
         hits = download_one_page(keyword, start_date, end_date, results_page, doc)
+
         #NYT API rate cap is 10 requests/minute
         time.sleep(6)
+
         #10 results per page
         if (results_page*ARTICLES_PER_PAGE) > hits:
             next_page = False
@@ -70,21 +68,18 @@ def download_one_page(keyword, start_date, end_date, results_page, doc):
 
     #retrieve JSON 
     page_meta = requests.get(api_call)
-    print(api_call)
+    print("API called: ", api_call)
+
     #parse into list
     page_meta_list = json.loads(page_meta.text)
         
     #add each article to xml tree
-    #note: this crashes on the last page 
-    #for i in range(ARTICLES_PER_PAGE):
-    #note: below crashes after article 99
-    #for i in range(len(page_meta_list['response']['docs'])):
     i = 0; 
     for item in page_meta_list['response']['docs']:   
         try: 
             web_url = item['web_url']
             #web_url = (page_meta_list['response']['docs'][i]['web_url'])
-            print("Article ", (i+10*results_page), " web url: ", web_url)
+            #print("Article ", (i+10*results_page), " web url: ", web_url)
         except IndexError:
             web_url = None
         
@@ -97,14 +92,17 @@ def download_one_page(keyword, start_date, end_date, results_page, doc):
             pub_date = b" "
 
         try: 
-            if ('section_name' in item['section_name'] and item['section_name'] != None):
-                section = item['section_name'].encode("utf8")
+            section = item['section_name'].encode("utf8")
+            print(section.decode("utf8"))
+            #if (('section_name' in item['section_name']) and (item['section_name'] != None)):
+                #print(item['section_name'])
+                #section = item['section_name'].encode("utf8")
             #if (('section_name' in page_meta_list['response']['docs'][i]) and (page_meta_list['response']['docs'][i]['section_name']!= None)):
                 #section = (page_meta_list['response']['docs'][i]['section_name'].encode("utf8"))
                 #print("Article ", i, " section: ", section)
-            else: 
-                section = b" "
-        except IndexError:
+            #else: 
+                #section = b" "
+        except (IndexError, KeyError): #KeyError
             section = b" "
 
         try: 
@@ -181,13 +179,10 @@ def print_usage():
     print("Error. Usage: nyt_searcher.py [keyword] [startdate] [enddate]")
     print("Example usage: nyt_searcher.py metaverse 2021-06-01 2022-06-02")
 
-
-
-
 def test():
-    start_date = datetime.date(2021, 6, 1)
+    start_date = datetime.date(2022, 1, 1).date()
     print("start date:  ", start_date)
-    end_date = datetime.date(2022, 6, 1)
+    end_date = datetime.date(2022, 2, 1).date()
     print("end date: ", end_date)
 
     download_articles("metaverse", start_date, end_date)
@@ -196,6 +191,5 @@ def test():
     #tree = ET.ElementTree(doc)
     #tree.write("./articles/test.xml", encoding='utf-8', xml_declaration=True)
     #parse_xml("./articles/test.xml", "./articles/test.csv", 210)
-
 
 man_parse_command()
