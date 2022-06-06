@@ -179,7 +179,7 @@ def man_parse_command():
 
 def print_usage():
     print("Error. Usage: nyt_searcher.py [keyword] [startdate] [enddate]")
-    print("Example usage: nyt_searcher.py metaverse 06-01-2021 06-01-2022")
+    print("Example usage: nyt_searcher.py metaverse 2021-06-01 2022-06-02")
 
 
 
