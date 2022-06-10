@@ -7,11 +7,11 @@ import numpy as np
 #driver(keyword, start_date, end_date, scope, sources)
     #expects keyword as single string
     #expects dates as strings in iso format [YYYY-MM-DD]
-    #expects sources as list of strings
+    #expects sources as list of strings in any order
     #calls nyt_engine, reddit_engine, other engines
-    #concatenates into one dataframe 
-    #could clean data? 
-    #could do some analysis? 
+    #concats into one dataframe 
+    #then, could clean data
+    #could do some analysis 
     #save df to csv file
     
 def driver(keyword, start_date, end_date, scope, sources): 
@@ -35,15 +35,17 @@ def driver(keyword, start_date, end_date, scope, sources):
             reddit = search_reddit(keyword, start_date, end_date)
             #print(reddit.DATE)
 
-        df = pd.concat([nyt, reddit], ignore_index=True)
+    df = pd.concat([nyt, reddit], ignore_index=True)
 
-        df.to_csv('./outputs/metaverse_test.csv')
+    
+    filename_out = './outputs/' + keyword + '_' + start_date.isoformat() + '_' + end_date.isoformat() + '.csv'
+    df.to_csv(filename_out)
     #df = nyt + reddit
     #filename_out = keyword_YYYY-MM-DD_YYYY-MM-DD.csv
     #df.to_csv(filename_out)
    
 def test():
-    driver('metaverse', '2022-06-01', '2022-06-08', 'doc', ["new_york_times","reddit"])
+    driver('metaverse', '2021-06-01', '2022-06-01', 'doc', ["reddit", "new_york_times"])
 
 test()       
 

@@ -1,26 +1,20 @@
 import datetime as dt
 import pandas as pd
 import json
-import pprint
 import time
 import requests
 from requests_html import HTMLSession
+from bs4 import BeautifulSoup
 
+# ******* CONTAINS PRIVATE API KEY DO NOT PUBLISH **********
+
+#Defining Melk format - see data dictionary for more info 
 FIELDS = ['ID', 'SOURCE', 'SECTION', 'SOURCE_URL', 'DATE', 'TITLE', 'FULL_TEXT', 'TYPE']
 SOURCE_NAME = "new_york_times"
 TYPE = "article"
 
 ARTICLES_PER_PAGE = 10
 #Article search API provides results in pages of 10 articles each.
- 
-
-
-
-
-# ******* CONTAINS PRIVATE API KEY DO NOT PUBLISH **********
-
-
-
 
 def search_nyt(keyword, start_date, end_date):
     #takes dates as date objects. searches with NYT archive API. 
@@ -67,6 +61,8 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
     page_meta = requests.get(api_call)
     page_meta_list = json.loads(page_meta.text)
 
+    print("Downloading page ", results_page, " of NYT results....")
+
     for doc in page_meta_list['response']['docs']:
         parse_article(doc, data, next_id)
         articles_collected += 1
@@ -80,9 +76,11 @@ def parse_article(article, data, next_id):
                  'SOURCE': SOURCE_NAME, 
                  'SECTION': article['section_name'], 
                  'SOURCE_URL': article['web_url'], 
-                 'DATE': article['pub_date'],
+                 #'DATE': article['pub_date'],
+                 'DATE': dt.datetime.fromisoformat(article['pub_date'].split("+")[0]),
                  'TITLE': article['headline']['main'], 
-                 'FULL_TEXT': scrape_content(article['web_url']), 
+                 #'FULL_TEXT': scrape_content(article['web_url']), 
+                 'FULL_TEXT': scrapealt(article['web_url']),
                  'TYPE': TYPE}
 
     data.append(this_article)
@@ -103,19 +101,18 @@ def scrape_content(web_url):
         content = content + paragraphs[i].text + " "
 
     return content
-  
 
-def test():
-    f = open('example.json')
+def scrapealt(url):
+    session = HTMLSession()
+    page = session.get(url)
 
-    data = json.load(f)
+    soup = BeautifulSoup(page.content, "html.parser")
 
-    #pprint.pprint(data)
+    #NYT archive webpages use <p class="css-at9mc1 evys1bk0"> elements for article body
+    ps = soup.find_all("p", class_="css-at9mc1")
 
-    print(data['response']['docs'][0])
-
-    for doc in data['response']['docs']:
-        print(doc['headline']['main'])
+    content = ""
+    for p in ps:
+        content = content + p.text + " "
     
-
-#test()
+    return content
