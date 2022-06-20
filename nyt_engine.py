@@ -8,15 +8,13 @@ from bs4 import BeautifulSoup
 
 # ******* CONTAINS PRIVATE API KEY DO NOT PUBLISH **********
 
-#Defining Melk format - see data dictionary for more info 
-FIELDS = ['ID', 'SOURCE', 'SECTION', 'SOURCE_URL', 'DATE', 'TITLE', 'FULL_TEXT', 'TYPE']
 SOURCE_NAME = "new_york_times"
 TYPE = "article"
 
 ARTICLES_PER_PAGE = 10
 #Article search API provides results in pages of 10 articles each.
 
-def search_nyt(keyword, start_date, end_date):
+def search_nyt(keyword, start_date, end_date, fields):
     #takes dates as date objects. searches with NYT archive API. 
     #returns a pandas dataframe with collected articles in Melk format (see data dictionary).
 
@@ -39,7 +37,7 @@ def search_nyt(keyword, start_date, end_date):
         #NYT API rate cap is 10 requests/minute
         time.sleep(6)
 
-    df = pd.DataFrame(data, columns=FIELDS)
+    df = pd.DataFrame(data, columns=fields)
 
     print("Success! Collected ", total_articles, " articles from The New York Times.")
 

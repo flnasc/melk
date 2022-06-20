@@ -4,6 +4,9 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 
+#Defining Melk format - see data dictionary for more info 
+FIELDS = ['ID', 'SOURCE', 'SECTION', 'SOURCE_URL', 'DATE', 'TITLE', 'FULL_TEXT', 'TYPE']
+
 #driver(keyword, start_date, end_date, scope, sources)
     #expects keyword as single string
     #expects dates as strings in iso format [YYYY-MM-DD]
@@ -23,29 +26,22 @@ def driver(keyword, start_date, end_date, scope, sources):
     reddit = pd.DataFrame()
 
     for source in sources:
-        print(source)
         if (source == "new_york_times"):
             print("Searching New York Times Archive....")
-            nyt = search_nyt(keyword, start_date, end_date)
-            #print(nyt.DATE)
-            #print(nyt)
+            nyt = search_nyt(keyword, start_date, end_date, FIELDS)
 
         if (source == "reddit"):
             print("Searching Reddit....")
-            reddit = search_reddit(keyword, start_date, end_date)
-            #print(reddit.DATE)
+            reddit = search_reddit(keyword, start_date, end_date, FIELDS)
 
     df = pd.concat([nyt, reddit], ignore_index=True)
 
     
     filename_out = './outputs/' + keyword + '_' + start_date.isoformat() + '_' + end_date.isoformat() + '.csv'
     df.to_csv(filename_out)
-    #df = nyt + reddit
-    #filename_out = keyword_YYYY-MM-DD_YYYY-MM-DD.csv
-    #df.to_csv(filename_out)
    
 def test():
-    driver('metaverse', '2021-06-01', '2022-06-01', 'doc', ["reddit", "new_york_times"])
+    driver('metaverse', '2022-05-01', '2022-06-01', 'doc', ["reddit", "new_york_times"])
 
 test()       
 
