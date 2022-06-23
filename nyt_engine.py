@@ -6,16 +6,19 @@ import requests
 from requests_html import HTMLSession
 from bs4 import BeautifulSoup
 
-# ******* CONTAINS PRIVATE API KEY DO NOT PUBLISH **********
+#Gets API keys from apiconfig.py file on your machine. 
+#This file must be created and filled in prior to use. 
+#See apiconfig_example.py. 
+import apiconfig
+
 
 SOURCE_NAME = "new_york_times"
 TYPE = "article"
-
 ARTICLES_PER_PAGE = 10
-#Article search API provides results in pages of 10 articles each.
+#The Article Search API provides results in pages of 10 articles each.
 
 def search_nyt(keyword, start_date, end_date, fields):
-    #takes dates as date objects. searches with NYT archive API. 
+    #takes dates as date objects. searches with NYT Article Search API. 
     #returns a pandas dataframe with collected articles in Melk format (see data dictionary).
 
     results_page = 0
@@ -52,7 +55,7 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
     api_query = 'q=' + keyword
     api_filter = "&begin_date="+start_date.strftime("%Y")+start_date.strftime("%m")+start_date.strftime("%d")+"&end_date="+end_date.strftime("%Y")+end_date.strftime("%m")+end_date.strftime("%d")
     api_page = '&page=' + str(results_page)
-    api_key = '&api-key=64d0YdzbSTBTBkBKtAJ2J2bMfbn57T8X'
+    api_key = '&api-key=' + apiconfig.new_york_times_api_key
     api_call = api_prefix + api_query + api_filter + api_page + api_key
 
     #retrieve JSON 
@@ -78,29 +81,14 @@ def parse_article(article, data, next_id):
                  'DATE': dt.datetime.fromisoformat(article['pub_date'].split("+")[0]),
                  'TITLE': article['headline']['main'], 
                  #'FULL_TEXT': scrape_content(article['web_url']), 
-                 'FULL_TEXT': scrapealt(article['web_url']),
+                 'FULL_TEXT': scrape_body_text(article['web_url']),
                  'TYPE': TYPE}
 
     data.append(this_article)
     
     return
 
-def scrape_content(web_url):
-
-    session = HTMLSession()
-    page = session.get(web_url)
-
-    #NYT archive webpages use <p class="css-at9mc1 evys1bk0"> elements for article body
-    paragraphs = page.html.find("p.css-at9mc1")
-
-    #paragraphs.append(page.html.find("p.css-8hvvyd"))
-    content = ""
-    for i in range(len(paragraphs)):
-        content = content + paragraphs[i].text + " "
-
-    return content
-
-def scrapealt(url):
+def scrape_body_text(url):
     session = HTMLSession()
     page = session.get(url)
 
