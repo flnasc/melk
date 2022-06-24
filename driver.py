@@ -1,8 +1,8 @@
+from operator import index
 from nyt_engine import search_nyt
 from reddit_engine import search_reddit
 import pandas as pd 
 import datetime as dt
-import numpy as np
 
 #Defining Melk format - see data dictionary for more info 
 FIELDS = ['ID', 'SOURCE', 'SECTION', 'SOURCE_URL', 'DATE', 'TITLE', 'FULL_TEXT', 'TYPE']
@@ -35,13 +35,11 @@ def driver(keyword, start_date, end_date, scope, sources):
             reddit = search_reddit(keyword, start_date, end_date, FIELDS)
 
     df = pd.concat([nyt, reddit], ignore_index=True)
+    #replace ID column with updated column that accounts for rows from other sources
+    df = df.drop(columns='ID')
+    df.reset_index(inplace=True)
+    df = df.rename(columns={'index':'ID'})
 
-    
     filename_out = './outputs/' + keyword + '_' + start_date.isoformat() + '_' + end_date.isoformat() + '.csv'
-    df.to_csv(filename_out)
-   
-def test():
-    driver('metaverse', '2022-05-01', '2022-06-01', 'doc', ["reddit", "new_york_times"])
-
-test()       
+    df.to_csv(filename_out)    
 
