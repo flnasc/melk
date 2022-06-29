@@ -78,9 +78,10 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
     print("Downloading page ", results_page, " of NYT results....")
 
     for doc in page_meta_list["response"]["docs"]:
-        parse_article(doc, data, next_id)
-        articles_collected += 1
-        next_id += 1
+        if doc['document_type'] == 'article':
+            parse_article(doc, data, next_id)
+            articles_collected += 1
+            next_id += 1
 
     return articles_collected
 
