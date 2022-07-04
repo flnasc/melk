@@ -8,6 +8,10 @@ SOURCE_NAME = "reddit"
 POST_TYPE = "post"
 COMMENT_TYPE = "comment"
 
+# Placeholder: pass this in how from database?
+# USER_LIMIT = 10000
+USER_LIMIT = float('inf')
+
 
 def search_reddit(keyword, start_date, end_date, fields):
     # takes dates as date objects. returns dataframe with collected posts in Melk format (see data).
@@ -35,6 +39,8 @@ def search_reddit(keyword, start_date, end_date, fields):
     for post in gen:
         if posts_collected % 100 == 0:
             print("Downloading post #", posts_collected, "....")
+        if posts_collected > USER_LIMIT:
+            break
 
         try:
             if (
@@ -68,6 +74,8 @@ def search_reddit(keyword, start_date, end_date, fields):
     for comment in gen:
         if comments_collected % 100 == 0:
             print("Downloading comment #", next_id, "....")
+        if comments_collected + posts_collected > USER_LIMIT:
+            break
         try:
             if (
                 comment.body
@@ -122,7 +130,7 @@ def collect_comment(comment, data, next_id):
 
 def test():
 
-    start_date = dt.date.fromisoformat("2022-05-01")
+    start_date = dt.date.fromisoformat("2000-05-01")
     end_date = dt.date.fromisoformat("2022-06-01")
     fields = [
         "ID",
@@ -139,4 +147,4 @@ def test():
     print(df.tail)
 
 
-# est()
+test()

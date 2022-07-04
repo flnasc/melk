@@ -17,6 +17,9 @@ TYPE = "article"
 ARTICLES_PER_PAGE = 10
 # The Article Search API provides results in pages of 10 articles each.
 
+# USER_LIMIT = 100
+USER_LIMIT = float("inf")
+
 
 def search_nyt(keyword, start_date, end_date, fields):
     # takes dates as date objects. searches with NYT Article Search API.
@@ -28,6 +31,10 @@ def search_nyt(keyword, start_date, end_date, fields):
     total_articles = 0
 
     while next_page is True:
+
+        if total_articles >= USER_LIMIT:
+            break
+
         # loop through pages of API results
 
         articles_collected = download_one_page(
@@ -78,7 +85,7 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
     print("Downloading page ", results_page, " of NYT results....")
 
     for doc in page_meta_list["response"]["docs"]:
-        if doc['document_type'] == 'article':
+        if doc["document_type"] == "article":
             parse_article(doc, data, next_id)
             articles_collected += 1
             next_id += 1
@@ -120,3 +127,17 @@ def scrape_body_text(url):
         content = content + p.text + " "
 
     return content
+
+
+def test():
+    s = dt.date.fromisoformat("1900-01-01")
+    e = dt.date.fromisoformat("2000-01-01")
+    search_nyt(
+        "bank",
+        s,
+        e,
+        ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"],
+    )
+
+
+test()
