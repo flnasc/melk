@@ -16,9 +16,17 @@ def main(filename):
         text = df.at[i, "FULL_TEXT"]
         # print("TEXT IS:      \n", text)
         text = clean(text)
+
+        # How are we implementing the options system? 
+        """if lower_flag:
+                text = text.lower()"""
+
         df.at[i, "FULL_TEXT"] = text
 
-    df.to_csv("./outputs/clean_example.csv")
+    #  No such file or directory: 'clean_./outputs/metaverse_2022-05-01_2022-05-02.csv'
+    filename_out = "clean_" + filename
+
+    df.to_csv(filename)
     return df
 
 
@@ -37,9 +45,6 @@ def clean(text):
     # print(text)
     return text
 
-
-def test():
-    main("./outputs/metaverse_2022-05-01_2022-05-02.csv")
-
-
-# test()
+def remove_hashtags(text):
+    text = re.sub(r"#", "", text)
+    return text
