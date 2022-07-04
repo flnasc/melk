@@ -19,7 +19,9 @@ def main(filename):
 
         # How are we implementing the options system? 
         """if lower_flag:
-                text = text.lower()"""
+                text = text.lower()
+            if remove_hashtags_flag:
+                text = remove_hashtags(text)"""
 
         df.at[i, "FULL_TEXT"] = text
 
@@ -46,5 +48,14 @@ def clean(text):
     return text
 
 def remove_hashtags(text):
+    # this removes just the # character itself:
     text = re.sub(r"#", "", text)
+
+    # to remove the entire #phrase, use this expression: 
+    # text = re.sub(r"#\S+", "", text)
+    return text
+
+def remove_twitter_handles(text):
+    #removes twitter handles
+    text = re.sub(r"@\S+", "", text)
     return text
