@@ -33,6 +33,7 @@ def search_nyt(keyword, start_date, end_date, fields):
     while next_page is True:
 
         if total_articles >= USER_LIMIT:
+            next_page = False
             break
 
         # loop through pages of API results
@@ -140,4 +141,4 @@ def test():
     )
 
 
-test()
+# test()
