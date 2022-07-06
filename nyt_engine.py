@@ -139,6 +139,3 @@ def test():
         e,
         ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"],
     )
-
-
-# test()
