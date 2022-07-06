@@ -9,7 +9,9 @@ import numpy as np
 # Output: new csv file with additional columns for sentiment value
 def add_sentiment_scores(csv):
     # clean data
-    df = cleaner.main(csv)
+    clean = cleaner.main(csv)
+
+    df = pd.read_csv(clean)
 
     # add column with sentiment scores initialized to zero
     df["SENTIMENT"] = 0
@@ -47,6 +49,8 @@ def sentiment_histogram(csv):
     hist = plt.hist(df["SENTIMENT"])
     plt.xlabel("Sentiment score")
     plt.ylabel("Frequency")
-    # plt.show()
+    plt.show()
 
     return hist
+
+
