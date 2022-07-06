@@ -2,15 +2,14 @@
 from psaw import PushshiftAPI
 import pandas as pd
 import datetime as dt
-import time
 
 SOURCE_NAME = "reddit"
 POST_TYPE = "post"
 COMMENT_TYPE = "comment"
 
 # Placeholder: pass this in how from database?
-# USER_LIMIT = 10000
-USER_LIMIT = float('inf')
+USER_LIMIT = 10000
+# USER_LIMIT = float('inf')
 
 
 def search_reddit(keyword, start_date, end_date, fields):
@@ -128,7 +127,7 @@ def collect_comment(comment, data, next_id):
     data.append(this_comment)
 
 
-def test():
+""" def test():
 
     start_date = dt.date.fromisoformat("2000-05-01")
     end_date = dt.date.fromisoformat("2022-06-01")
@@ -144,7 +143,7 @@ def test():
     ]
     df = search_reddit("metaverse", start_date, end_date, fields)
     print(df.head)
-    print(df.tail)
+    print(df.tail) """
 
 
-test()
+
