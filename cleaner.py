@@ -26,10 +26,10 @@ def main(filename):
         df.at[i, "FULL_TEXT"] = text
 
     #  No such file or directory: 'clean_./outputs/metaverse_2022-05-01_2022-05-02.csv'
-    filename_out = "clean_" + filename
+    # filename_out = "clean_" + filename
 
     df.to_csv(filename)
-    return df
+    return filename
 
 
 def clean(text):
