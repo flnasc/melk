@@ -8,16 +8,18 @@ import pandas as pd
 SOURCE_NAME = "poetry_foundation"
 TYPE = "poem"
 
+
 def search_poems(keyword, fields, path_to_dataset):
 
     poems = pd.read_csv(path_to_dataset)
 
-    #select poems that contain the keyword in their text. Case insensitive. 
-    poems = poems[poems['Poem'].str.contains(keyword, case=False)]
+    # select poems that contain the keyword in their text. Case insensitive.
+    poems = poems[poems["Poem"].str.contains(keyword, case=False)]
 
     df = parse_poems(poems, fields)
 
     return df
+
 
 def parse_poems(poems, fields):
     # takes dataframe of poems, returns new df formatted in Melk format
@@ -29,12 +31,12 @@ def parse_poems(poems, fields):
         this_poem = {
             "ID": i,
             "SOURCE": SOURCE_NAME,
-            "SECTION": "", 
+            "SECTION": "",
             "SOURCE_URL": "",
             "DATE": "",
-            "TITLE": poems.at[i, 'Title'],
-            "FULL_TEXT": poems.at[i, 'Poem'],
-            "TYPE": TYPE
+            "TITLE": poems.at[i, "Title"],
+            "FULL_TEXT": poems.at[i, "Poem"],
+            "TYPE": TYPE,
         }
         data.append(this_poem)
 
