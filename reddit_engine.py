@@ -1,4 +1,3 @@
-# from pmaw import PushshiftAPI
 from psaw import PushshiftAPI
 import pandas as pd
 import datetime as dt
@@ -125,25 +124,3 @@ def collect_comment(comment, data, next_id):
         "TYPE": COMMENT_TYPE,
     }
     data.append(this_comment)
-
-
-""" def test():
-
-    start_date = dt.date.fromisoformat("2000-05-01")
-    end_date = dt.date.fromisoformat("2022-06-01")
-    fields = [
-        "ID",
-        "SOURCE",
-        "SECTION",
-        "SOURCE_URL",
-        "DATE",
-        "TITLE",
-        "FULL_TEXT",
-        "TYPE",
-    ]
-    df = search_reddit("metaverse", start_date, end_date, fields)
-    print(df.head)
-    print(df.tail) """
-
-
-
