@@ -2,6 +2,7 @@ from operator import index
 from nyt_engine import search_nyt
 from poems_engine import search_poems
 from reddit_engine import search_reddit
+from twitter_engine import search_twitter
 import pandas as pd
 import datetime as dt
 
@@ -12,6 +13,9 @@ FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT",
 # expects keyword as single string
 # expects dates as strings in iso format [YYYY-MM-DD]
 # expects sources as list of strings in any order
+# Under construction: expects limit as a dict showing how many items a user can retrieve from each source:
+#     example: {'new_york_times': 100, 'reddit': 2000}
+#     if there is no entry for a given source, assumes no limit
 # calls nyt_engine, reddit_engine, other engines
 # concats into one dataframe
 # then, could clean data
@@ -27,6 +31,7 @@ def driver(keyword, start_date, end_date, scope, sources):
     nyt = pd.DataFrame()
     reddit = pd.DataFrame()
     poems = pd.DataFrame()
+    twitter = pd.DataFrame()
 
     poetry_dataset_path = "./data/poetry_foundation_full.csv"
 
@@ -44,7 +49,11 @@ def driver(keyword, start_date, end_date, scope, sources):
             print("Warning: this dataset is NOT filterable by date.")
             poems = search_poems(keyword, FIELDS, poetry_dataset_path)
 
-    df = pd.concat([nyt, reddit, poems], ignore_index=True)
+        if source == "twitter":
+            print("Searching Twitter...")
+            twitter = search_twitter(keyword, start_date, end_date, FIELDS)
+
+    df = pd.concat([nyt, reddit, poems, twitter], ignore_index=True)
     # replace ID column with updated column that accounts for rows from other sources
     df = df.drop(columns="ID")
     df.reset_index(inplace=True)
