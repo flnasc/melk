@@ -25,7 +25,6 @@ def parse_poems(poems, fields):
     # takes dataframe of poems, returns new df formatted in Melk format
     poems = poems.reset_index()
 
-    print(poems)
     data = []
     for i in range(len(poems)):
         this_poem = {
