@@ -1,5 +1,7 @@
 import pandas as pd
 import datetime as dt
+import os
+import apiconfig
 from searchtweets import gen_request_parameters, load_credentials, collect_results
 
 SOURCE_NAME = "twitter"
@@ -22,9 +24,9 @@ def search_twitter(keyword, start_date, end_date, fields):
         tweet_fields="id,created_at,text",
     )
 
-    search_args = load_credentials(
-        "~/.twitter_keys.yaml", yaml_key="search_tweets_v2", env_overwrite=False
-    )
+    os.environ["SEARCHTWEETS_ENDPOINT"] = apiconfig.search_tweets_v2_endpoint
+    os.environ["SEARCHTWEETS_BEARER_TOKEN"] = apiconfig.search_tweets_bearer_token
+    search_args = load_credentials()
 
     results_pages = collect_results(
         query, max_tweets=USER_LIMIT, result_stream_args=search_args
