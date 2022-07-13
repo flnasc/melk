@@ -7,6 +7,7 @@ from sotu_engine import search_sotu
 from billboard_engine import search_billboard
 import pandas as pd
 import datetime as dt
+import apiconfig
 
 # Defining Melk format - see data dictionary for more info
 FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"]
@@ -37,9 +38,9 @@ def driver(keyword, start_date, end_date, scope, sources):
     sotu = pd.DataFrame()
     billboard = pd.DataFrame()
 
-    poetry_dataset_path = "./data/poetry_foundation_full.csv"
-    sotu_dataset_path = "./data/state_of_the_union_data/"
-    billboard_dataset_path = "./data/billboard_songs/"
+    poetry_dataset_path = apiconfig.poetry_dataset_path
+    sotu_dataset_path = apiconfig.sotu_dataset_path
+    billboard_dataset_path = apiconfig.billboard_dataset_path
 
     for source in sources:
         if source == "new_york_times":
