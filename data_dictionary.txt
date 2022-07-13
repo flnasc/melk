@@ -9,15 +9,15 @@ id: (int)
     Unique numerical identifier assigned by Melk on collection. Type: int. 
 
 source: (string) 
-    i.e. New York Times, Twitter, Reddit, Poetry Foundation, etc. Assigned by Melk on collection. 
+    i.e. New York Times, Twitter, Reddit, Poetry Foundation, State of the Union archive,
+    Billboard Top 100 archive, etc. Assigned by Melk on collection. 
 
 section: (string) 
     NYT: [section_name] (e.g. World, Sports, etc.)
-    NYT downloader XML: [section]
     Reddit post: [subreddit_name_prefixed] (e.g. r/ultralight)
     Reddit comment: [subreddit_name_prefixed]
     Twitter: N/A
-    PoetryFoundation: [poet]
+    PoetryFoundation: N/A
     MediaCloud: [media_name] (Name of news outlet story scraped from). 
     Genius: [artist_names] 
     Wikipedia: ??
@@ -25,6 +25,8 @@ section: (string)
     Google Play Store: Name of app being reviewed. Calculate during search process. 
     StackOverflow question: N/A
     StackOverflow answer: N/A
+    State of the Union archive: Name of president giving the speech. 
+    Billboard Top 100 archive: Name of artist. 
 
 source_URL: (string)
     web link to page with the text. 
@@ -41,6 +43,8 @@ source_URL: (string)
     Google Play Store: N/A 
     StackOverflow question: N/A
     StackOverflow answer: N/A
+    State of the Union archive: N/A
+    Billboard Top 100 archive: N/A
 
 date: (Type: ??)
     Date published or date posted. Use datetime module for python. 
@@ -68,6 +72,10 @@ date: (Type: ??)
     StackOverflow question: computed from [creation_date]
         ex. 1373429266
     StackOverflow answer: computed from [creation_date]
+    Billboard Top 100 archive: Original source only contains year. Saved in Melk as YYYY-01-01, with Jan 1st
+        as a placeholder date to match formatting of the date field for other source types. 
+    State of the Union archive: Original source only contains year. Saved in Melk as YYYY-01-01, with Jan 1st
+        as a placeholder date to match formatting of the date field for other source types. 
 
 title: (string)
     NYT: Article [headline -> main]
@@ -83,6 +91,8 @@ title: (string)
     Google Play Store: N/A
     StackOverflow question: [title]
     StackOverflow answer: [title] note: this is the same as the title of the question being answered
+    Billboard Top 100 archive: Song title
+    State of the Union archive: "State of the Union address YYYY"
 
 full_text: (string)
     NYT: Full article text (extract from webURL?) 
@@ -98,6 +108,9 @@ full_text: (string)
     Google Play Store: [comment->text]
     StackOverflow question: [body] note: includes HTML markup, blocks of code, links. 
     StackOverflow answer: [body] note: same as above
+    Billboard Top 100 archive: song lyrics.
+    State of the Union archive: full text of speech.
+
 
 type: (string) 
     NYT: all have type "article".  
@@ -112,3 +125,5 @@ type: (string)
     Google Play Store: all have type "app_review". 
     StackOverflow question: "so_question".
     StackOverflow answer: "so_answer". note: could also use post/comment types like Reddit
+    Billboard Top 100 archive: song
+    State of Union archive: speech
