@@ -33,7 +33,8 @@ def collect_speech(speech, data, id):
         "SOURCE": SOURCE_NAME,
         "SECTION": speech["name"],
         "SOURCE_URL": "",
-        "DATE": speech["year"],
+        # puts Jan 1 as placeholder date to match format of other entries
+        "DATE": str(speech["year"]) + "-01-01",
         "TITLE": "State of the Union Address " + str(speech["year"]),
         "FULL_TEXT": speech["text"],
         "TYPE": TYPE,

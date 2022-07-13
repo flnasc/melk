@@ -36,7 +36,8 @@ def collect_song(song, data, id, year):
         "SOURCE": SOURCE_NAME,
         "SECTION": song["artist"],
         "SOURCE_URL": "",
-        "DATE": year,
+        # puts Jan 1 as placeholder date to match format of other entries
+        "DATE": str(year) + "-01-01",
         "TITLE": song["title"],
         "FULL_TEXT": song["lyrics"],
         "TYPE": TYPE,
