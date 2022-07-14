@@ -73,6 +73,6 @@ def collect_tweet_alt(tweet, data, tweets_collected):
         full_text=tweet["text"],
         type=TYPE,
         source_url="https://twitter.com/twitter/status/" + tweet["id"],
-        date=dt.datetime.fromisoformat(tweet["created_at"].split("T")[0]),
+        date=dt.datetime.fromisoformat(tweet["created_at"].split("Z")[0]),
     )
     data.append(vars(this_tweet))

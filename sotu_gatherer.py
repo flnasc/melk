@@ -39,7 +39,7 @@ def collect_speech_alt(speech, data, id):
         title="State of the Union Address " + str(speech["year"]),
         section=speech["name"],
         # puts Jan 1 as placeholder date to match format of other entries
-        date=str(speech["year"]) + "-01-01",
+        date=str(speech["year"]) + "-01-01 00:00:00",
     )
     data.append(vars(this_speech))
 

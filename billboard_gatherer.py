@@ -57,7 +57,7 @@ def collect_song_alt(song, data, id, year):
         title=song["title"],
         section=song["artist"],
         # puts Jan 1 as placeholder date to match format of other entries
-        date=str(year) + "-01-01",
+        date=str(year) + "-01-01 00:00:00",
     )
 
     data.append(vars(this_song))
