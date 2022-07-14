@@ -6,6 +6,7 @@ import datetime
 SOURCE_NAME = "state_of_the_union"
 TYPE = "speech"
 
+
 def search_sotu(keyword, start_date, end_date, fields, path_to_dataset):
 
     files = os.listdir(path_to_dataset)

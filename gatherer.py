@@ -1,10 +1,10 @@
 from operator import index
-from nyt_engine import search_nyt
-from poems_engine import search_poems
-from reddit_engine import search_reddit
-from twitter_engine import search_twitter
-from sotu_engine import search_sotu
-from billboard_engine import search_billboard
+from nyt_gatherer import search_nyt
+from poems_gatherer import search_poems
+from reddit_gatherer import search_reddit
+from twitter_gatherer import search_twitter
+from sotu_gatherer import search_sotu
+from billboard_gatherer import search_billboard
 import pandas as pd
 import datetime as dt
 import apiconfig
@@ -59,7 +59,7 @@ def driver(keyword, start_date, end_date, scope, sources):
         if source == "twitter":
             print("Searching Twitter...")
             twitter = search_twitter(keyword, start_date, end_date, FIELDS)
-        
+
         if source == "state_of_the_union":
             print("Searching State of the Union archive...")
             print("Warning: this dataset is only filterable by year, not day.")
@@ -68,7 +68,9 @@ def driver(keyword, start_date, end_date, scope, sources):
         if source == "billboard":
             print("Searching Billboard Top 100 archives...")
             print("Warning: this dataset is only filterable by year, not day.")
-            billboard = search_billboard(keyword, start_date, end_date, FIELDS, billboard_dataset_path)
+            billboard = search_billboard(
+                keyword, start_date, end_date, FIELDS, billboard_dataset_path
+            )
 
     df = pd.concat([nyt, reddit, poems, twitter, sotu, billboard], ignore_index=True)
     # replace ID column with updated column that accounts for rows from other sources
