@@ -1,4 +1,3 @@
-from operator import index
 from nyt_gatherer import search_nyt
 from poems_gatherer import search_poems
 from reddit_gatherer import search_reddit
@@ -38,10 +37,6 @@ def driver(keyword, start_date, end_date, scope, sources):
     sotu = pd.DataFrame()
     billboard = pd.DataFrame()
 
-    poetry_dataset_path = apiconfig.poetry_dataset_path
-    sotu_dataset_path = apiconfig.sotu_dataset_path
-    billboard_dataset_path = apiconfig.billboard_dataset_path
-
     for source in sources:
         if source == "new_york_times":
             print("Searching New York Times Archive....")
@@ -54,7 +49,7 @@ def driver(keyword, start_date, end_date, scope, sources):
         if source == "poetry_foundation":
             print("Searching Poetry Foundation dataset....")
             print("Warning: this dataset is NOT filterable by date.")
-            poems = search_poems(keyword, FIELDS, poetry_dataset_path)
+            poems = search_poems(keyword, FIELDS, apiconfig.poetry_dataset_path)
 
         if source == "twitter":
             print("Searching Twitter...")
@@ -63,13 +58,13 @@ def driver(keyword, start_date, end_date, scope, sources):
         if source == "state_of_the_union":
             print("Searching State of the Union archive...")
             print("Warning: this dataset is only filterable by year, not day.")
-            sotu = search_sotu(keyword, start_date, end_date, FIELDS, sotu_dataset_path)
+            sotu = search_sotu(keyword, start_date, end_date, FIELDS, apiconfig.sotu_dataset_path)
 
         if source == "billboard":
             print("Searching Billboard Top 100 archives...")
             print("Warning: this dataset is only filterable by year, not day.")
             billboard = search_billboard(
-                keyword, start_date, end_date, FIELDS, billboard_dataset_path
+                keyword, start_date, end_date, FIELDS, apiconfig.billboard_dataset_path
             )
 
     df = pd.concat([nyt, reddit, poems, twitter, sotu, billboard], ignore_index=True)
@@ -79,7 +74,7 @@ def driver(keyword, start_date, end_date, scope, sources):
     df = df.rename(columns={"index": "ID"})
 
     filename_out = (
-        "./outputs/"
+        apiconfig.outputs_folder_path
         + keyword
         + "_"
         + start_date.isoformat()
@@ -87,5 +82,6 @@ def driver(keyword, start_date, end_date, scope, sources):
         + end_date.isoformat()
         + ".csv"
     )
+    #save as csv file, then return name of that file
     df.to_csv(filename_out)
     return filename_out
