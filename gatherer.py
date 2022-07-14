@@ -58,7 +58,9 @@ def driver(keyword, start_date, end_date, scope, sources):
         if source == "state_of_the_union":
             print("Searching State of the Union archive...")
             print("Warning: this dataset is only filterable by year, not day.")
-            sotu = search_sotu(keyword, start_date, end_date, FIELDS, apiconfig.sotu_dataset_path)
+            sotu = search_sotu(
+                keyword, start_date, end_date, FIELDS, apiconfig.sotu_dataset_path
+            )
 
         if source == "billboard":
             print("Searching Billboard Top 100 archives...")
@@ -82,6 +84,6 @@ def driver(keyword, start_date, end_date, scope, sources):
         + end_date.isoformat()
         + ".csv"
     )
-    #save as csv file, then return name of that file
+    # save as csv file, then return name of that file
     df.to_csv(filename_out)
     return filename_out

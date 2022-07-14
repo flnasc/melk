@@ -46,7 +46,7 @@ def search_nyt(keyword, start_date, end_date, fields):
         total_articles += articles_collected
 
         if articles_collected < ARTICLES_PER_PAGE:
-            # this must be the last page 
+            # this must be the last page
             next_page = False
 
         results_page += 1
@@ -96,8 +96,9 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
 
     return articles_collected
 
+
 # old method
-def parse_article(article, data, next_id):
+""" def parse_article(article, data, next_id):
 
     this_article = {
         "ID": next_id,
@@ -112,7 +113,7 @@ def parse_article(article, data, next_id):
         "TYPE": TYPE,
     }
 
-    data.append(this_article)
+    data.append(this_article) """
 
 
 def parse_article_alt(article, data, next_id):
@@ -125,7 +126,7 @@ def parse_article_alt(article, data, next_id):
         title=article["headline"]["main"],
         section=article["section_name"],
         source_url=article["web_url"],
-        date = dt.datetime.fromisoformat(article["pub_date"].split("+")[0])
+        date=dt.datetime.fromisoformat(article["pub_date"].split("+")[0]),
     )
 
     data.append(vars(this_article))

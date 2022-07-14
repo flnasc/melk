@@ -17,7 +17,7 @@ def search_twitter(keyword, start_date, end_date, fields):
     # as defined by fields, which is taken as a list ['ID', 'SOURCE', etc.] and must match.
 
     query = gen_request_parameters(
-        #does not include retweets in results
+        # does not include retweets in results
         keyword + " -is:retweet",
         start_time=start_date.isoformat(),
         end_time=end_date.isoformat(),
@@ -50,7 +50,8 @@ def search_twitter(keyword, start_date, end_date, fields):
 
     return df
 
-# old method 
+
+""" # old method 
 def collect_tweet(tweet, data, tweets_collected):
     this_tweet = {
         "ID": tweets_collected,
@@ -62,7 +63,8 @@ def collect_tweet(tweet, data, tweets_collected):
         "FULL_TEXT": tweet["text"],
         "TYPE": TYPE,
     }
-    data.append(this_tweet)
+    data.append(this_tweet) """
+
 
 def collect_tweet_alt(tweet, data, tweets_collected):
     this_tweet = MelkRow(
@@ -71,6 +73,6 @@ def collect_tweet_alt(tweet, data, tweets_collected):
         full_text=tweet["text"],
         type=TYPE,
         source_url="https://twitter.com/twitter/status/" + tweet["id"],
-        date=dt.datetime.fromisoformat(tweet["created_at"].split("T")[0])
+        date=dt.datetime.fromisoformat(tweet["created_at"].split("T")[0]),
     )
     data.append(vars(this_tweet))

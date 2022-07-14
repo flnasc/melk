@@ -1,10 +1,12 @@
 # FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"]
-# one of the benefits of using a class here is that we can require certain fields as positional arguements, 
-# and give default/empty values of "" to non-required fields. 
+# one of the benefits of using a class here is that we can require certain fields as positional arguements,
+# and give default/empty values of "" to non-required fields.
 
-class MelkRow():
 
-    def __init__(self, id, source, full_text, type, title="", section="", source_url="", date=""):
+class MelkRow:
+    def __init__(
+        self, id, source, full_text, type, title="", section="", source_url="", date=""
+    ):
         self.ID = id
         self.SECTION = section
         self.SOURCE = source

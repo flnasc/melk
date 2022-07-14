@@ -2,6 +2,7 @@ import pandas as pd
 import json
 import os
 import datetime as dt
+from format import MelkRow
 
 SOURCE_NAME = "billboard"
 TYPE = "song"
@@ -15,6 +16,7 @@ def search_billboard(keyword, start_date, end_date, fields, path_to_dataset):
     next_id = 0
 
     for file in files:
+        # expects filenames to be in format YYYY.json
         year = int(file.split(".")[0])
         if start_date.year <= year <= end_date.year:
             with open(path_to_dataset + file) as f:
@@ -22,7 +24,7 @@ def search_billboard(keyword, start_date, end_date, fields, path_to_dataset):
                 for song in songs:
                     if keyword in song["lyrics"]:
                         print("Collecting ", song["title"])
-                        collect_song(song, data, next_id, year)
+                        collect_song_alt(song, data, next_id, year)
                         next_id += 1
 
     df = pd.DataFrame(data, columns=fields)
@@ -30,6 +32,7 @@ def search_billboard(keyword, start_date, end_date, fields, path_to_dataset):
     return df
 
 
+""" # old method
 def collect_song(song, data, id, year):
     this_song = {
         "ID": id,
@@ -42,4 +45,19 @@ def collect_song(song, data, id, year):
         "FULL_TEXT": song["lyrics"],
         "TYPE": TYPE,
     }
-    data.append(this_song)
+    data.append(this_song) """
+
+
+def collect_song_alt(song, data, id, year):
+    this_song = MelkRow(
+        id=id,
+        source=SOURCE_NAME,
+        full_text=song["lyrics"],
+        type=TYPE,
+        title=song["title"],
+        section=song["artist"],
+        # puts Jan 1 as placeholder date to match format of other entries
+        date=str(year) + "-01-01",
+    )
+
+    data.append(vars(this_song))

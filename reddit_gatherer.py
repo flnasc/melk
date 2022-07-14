@@ -18,7 +18,7 @@ def search_reddit(keyword, start_date, end_date, fields):
 
     api = PushshiftAPI()
 
-    #Pushshift API takes start/stop times as timestamp integers
+    # Pushshift API takes start/stop times as timestamp integers
     start = dt.datetime(start_date.year, start_date.month, start_date.day)
     start = int(start.timestamp())
     end = dt.datetime(end_date.year, end_date.month, end_date.day)
@@ -47,7 +47,7 @@ def search_reddit(keyword, start_date, end_date, fields):
                 and post.selftext != "[deleted]"
                 and post.selftext != "[removed]"
             ):
-                #collect_post(post, data, next_id)
+                # collect_post(post, data, next_id)
                 collect_post_alt(post, data, next_id)
                 posts_collected += 1
                 next_id += 1
@@ -66,7 +66,7 @@ def search_reddit(keyword, start_date, end_date, fields):
     for comment in gen:
         if comments_collected % 100 == 0:
             print("Downloading comment #", comments_collected, "....")
-        
+
         try:
             # do not collect comments with empty bodies, or deleted/removed comments
             if (
@@ -92,8 +92,9 @@ def search_reddit(keyword, start_date, end_date, fields):
 
     return df
 
+
 # old method
-def collect_post(post, data, next_id):
+""" def collect_post(post, data, next_id):
     this_post = {
         "ID": next_id,
         "SOURCE": SOURCE_NAME,
@@ -104,25 +105,26 @@ def collect_post(post, data, next_id):
         "FULL_TEXT": post.selftext,
         "TYPE": POST_TYPE,
     }
-    data.append(this_post)
+    data.append(this_post) """
+
 
 def collect_post_alt(post, data, next_id):
     this_post = MelkRow(
-        id = next_id, 
-        source = SOURCE_NAME,
-        full_text = post.selftext,
-        type = POST_TYPE,
-        title = post.title,
-        section = post.subreddit,
-        source_url = post.url,
-        date = (dt.datetime.utcfromtimestamp(post.created_utc))
+        id=next_id,
+        source=SOURCE_NAME,
+        full_text=post.selftext,
+        type=POST_TYPE,
+        title=post.title,
+        section=post.subreddit,
+        source_url=post.url,
+        date=(dt.datetime.utcfromtimestamp(post.created_utc)),
     )
 
     data.append(vars(this_post))
 
 
-# old method 
-def collect_comment(comment, data, next_id):
+# old method
+""" def collect_comment(comment, data, next_id):
     this_comment = {
         "ID": next_id,
         "SOURCE": SOURCE_NAME,
@@ -133,11 +135,12 @@ def collect_comment(comment, data, next_id):
         "FULL_TEXT": comment.body,
         "TYPE": COMMENT_TYPE,
     }
-    data.append(this_comment)
+    data.append(this_comment) """
+
 
 def collect_comment_alt(comment, data, next_id):
     this_comment = MelkRow(
-        id=next_id, 
+        id=next_id,
         source=SOURCE_NAME,
         full_text=comment.body,
         type=COMMENT_TYPE,
