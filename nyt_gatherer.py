@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 # This file must be created and filled in prior to use.
 # See apiconfig_example.py.
 import apiconfig
+from format import MelkRow
 
 
 SOURCE_NAME = "new_york_times"
@@ -18,7 +19,8 @@ ARTICLES_PER_PAGE = 10
 # The Article Search API provides results in pages of 10 articles each.
 
 # USER_LIMIT = 100
-USER_LIMIT = float("inf")
+USER_LIMIT = apiconfig.nyt_user_limit
+# USER_LIMIT = float("inf")
 
 
 def search_nyt(keyword, start_date, end_date, fields):
@@ -44,6 +46,7 @@ def search_nyt(keyword, start_date, end_date, fields):
         total_articles += articles_collected
 
         if articles_collected < ARTICLES_PER_PAGE:
+            # this must be the last page 
             next_page = False
 
         results_page += 1
@@ -87,13 +90,13 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
 
     for doc in page_meta_list["response"]["docs"]:
         if doc["document_type"] == "article":
-            parse_article(doc, data, next_id)
+            parse_article_alt(doc, data, next_id)
             articles_collected += 1
             next_id += 1
 
     return articles_collected
 
-
+# old method
 def parse_article(article, data, next_id):
 
     this_article = {
@@ -111,7 +114,21 @@ def parse_article(article, data, next_id):
 
     data.append(this_article)
 
-    return
+
+def parse_article_alt(article, data, next_id):
+
+    this_article = MelkRow(
+        id=next_id,
+        source=SOURCE_NAME,
+        full_text=scrape_body_text(article["web_url"]),
+        type=TYPE,
+        title=article["headline"]["main"],
+        section=article["section_name"],
+        source_url=article["web_url"],
+        date = dt.datetime.fromisoformat(article["pub_date"].split("+")[0])
+    )
+
+    data.append(vars(this_article))
 
 
 def scrape_body_text(url):
@@ -128,14 +145,3 @@ def scrape_body_text(url):
         content = content + p.text + " "
 
     return content
-
-
-def test():
-    s = dt.date.fromisoformat("1900-01-01")
-    e = dt.date.fromisoformat("2000-01-01")
-    search_nyt(
-        "bank",
-        s,
-        e,
-        ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"],
-    )

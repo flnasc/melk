@@ -3,12 +3,13 @@ import datetime as dt
 import os
 import apiconfig
 from searchtweets import gen_request_parameters, load_credentials, collect_results
+from format import MelkRow
 
 SOURCE_NAME = "twitter"
 TYPE = "tweet"
 
 # harcoded for testing
-USER_LIMIT = 200
+USER_LIMIT = apiconfig.twitter_user_limit
 
 
 def search_twitter(keyword, start_date, end_date, fields):
@@ -16,6 +17,7 @@ def search_twitter(keyword, start_date, end_date, fields):
     # as defined by fields, which is taken as a list ['ID', 'SOURCE', etc.] and must match.
 
     query = gen_request_parameters(
+        #does not include retweets in results
         keyword + " -is:retweet",
         start_time=start_date.isoformat(),
         end_time=end_date.isoformat(),
@@ -24,6 +26,7 @@ def search_twitter(keyword, start_date, end_date, fields):
         tweet_fields="id,created_at,text",
     )
 
+    # load_credentials looks for credentials in environment variables, so we set them here
     os.environ["SEARCHTWEETS_ENDPOINT"] = apiconfig.search_tweets_v2_endpoint
     os.environ["SEARCHTWEETS_BEARER_TOKEN"] = apiconfig.search_tweets_bearer_token
     search_args = load_credentials()
@@ -38,7 +41,8 @@ def search_twitter(keyword, start_date, end_date, fields):
     for page in results_pages:
         for tweet in page["data"]:
 
-            collect_tweet(tweet, data, tweets_collected)
+            # collect_tweet(tweet, data, tweets_collected)
+            collect_tweet_alt(tweet, data, tweets_collected)
             tweets_collected += 1
 
     df = pd.DataFrame(data, columns=fields)
@@ -46,7 +50,7 @@ def search_twitter(keyword, start_date, end_date, fields):
 
     return df
 
-
+# old method 
 def collect_tweet(tweet, data, tweets_collected):
     this_tweet = {
         "ID": tweets_collected,
@@ -59,4 +63,14 @@ def collect_tweet(tweet, data, tweets_collected):
         "TYPE": TYPE,
     }
     data.append(this_tweet)
-    return
+
+def collect_tweet_alt(tweet, data, tweets_collected):
+    this_tweet = MelkRow(
+        id=tweets_collected,
+        source=SOURCE_NAME,
+        full_text=tweet["text"],
+        type=TYPE,
+        source_url="https://twitter.com/twitter/status/" + tweet["id"],
+        date=dt.datetime.fromisoformat(tweet["created_at"].split("T")[0])
+    )
+    data.append(vars(this_tweet))
