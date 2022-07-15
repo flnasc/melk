@@ -1,6 +1,6 @@
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import cleaner
+# import cleaner
 import matplotlib.pyplot as plt
 import numpy as np
 import nltk

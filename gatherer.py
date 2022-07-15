@@ -1,9 +1,9 @@
-from nyt_gatherer import search_nyt
-from poems_gatherer import search_poems
-from reddit_gatherer import search_reddit
-from twitter_gatherer import search_twitter
-from sotu_gatherer import search_sotu
-from billboard_gatherer import search_billboard
+from gatherers.nyt_gatherer import search_nyt
+from gatherers.poems_gatherer import search_poems
+from gatherers.reddit_gatherer import search_reddit
+from gatherers.twitter_gatherer import search_twitter
+from gatherers.sotu_gatherer import search_sotu
+from gatherers.billboard_gatherer import search_billboard
 import pandas as pd
 import datetime as dt
 import apiconfig
