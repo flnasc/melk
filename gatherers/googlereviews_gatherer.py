@@ -1,20 +1,7 @@
 from google_play_scraper import app, reviews_all, reviews
-# from format import MelkRow
+from format import MelkRow
 import datetime
 import pandas as pd
-
-class MelkRow:
-    def __init__(
-        self, id, source, full_text, type, title="", section="", source_url="", date=""
-    ):
-        self.ID = id
-        self.SECTION = section
-        self.SOURCE = source
-        self.SOURCE_URL = source_url
-        self.DATE = date
-        self.TITLE = title
-        self.FULL_TEXT = full_text
-        self.TYPE = type
 
 # Note: this file is unfinished, untested, and is not integrated into the main gatherer flow. 
 # search_reviews_db() gives functionality similar to the other gatherers, but it relies on having a local
@@ -33,7 +20,7 @@ class MelkRow:
 # Pass this location along with keyword and dates to search_reviews_db(). This will return a dataframe with 
 # only the rows from the database we collected that match the query. 
 
-FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"]
+# FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"]
 SOURCE = "google_play_store"
 TYPE = "app_review"
 
@@ -110,5 +97,3 @@ top_free = ['com.zhiliaoapp.musically','com.babbel.mobile.android.en', 'com.squa
 'com.different.toonme', 'com.google.android.apps.dynamite', 'com.snapchat.android', 'com.mcdonalds.app']
 
 test_sample = ['com.seattletimes.android.SeattleTimesMobileNews', 'com.nytimes.android', 'com.washingtonpost.android']
-
-# create_db(top_free, FIELDS)
