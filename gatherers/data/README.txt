@@ -11,3 +11,5 @@ Poetry Foundation dataset source:
 from poetryfoundation.org
 
 Billboard dataset source: provided under MIT license from https://github.com/kevinschaich/billboard. Goes up to 2015. 
+
+Google play store dataset is a collection of up to 10k reviews each for the ten top free apps on the Google Play Store on July 18th 2022. 
