@@ -21,8 +21,7 @@ def search_sotu(keyword, start_date, end_date, fields, path_to_dataset):
             if start_date.year <= speech["year"] <= end_date.year:
                 text = speech["text"]
                 if keyword in text:
-                    collect_speech_alt(speech, data, next_id)
-                    # collect_speech(speech, data, next_id)
+                    collect_speech(speech, data, next_id)
                     next_id += 1
 
     df = pd.DataFrame(data, columns=fields)
@@ -30,7 +29,7 @@ def search_sotu(keyword, start_date, end_date, fields, path_to_dataset):
     return df
 
 
-def collect_speech_alt(speech, data, id):
+def collect_speech(speech, data, id):
     this_speech = MelkRow(
         id=id,
         source=SOURCE_NAME,
@@ -42,19 +41,3 @@ def collect_speech_alt(speech, data, id):
         date=str(speech["year"]) + "-01-01 00:00:00",
     )
     data.append(vars(this_speech))
-
-
-""" def collect_speech(speech, data, id):
-    this_speech = {
-        "ID": id,
-        "SOURCE": SOURCE_NAME,
-        "SECTION": speech["name"],
-        "SOURCE_URL": "",
-        # puts Jan 1 as placeholder date to match format of other entries
-        "DATE": str(speech["year"]) + "-01-01",
-        "TITLE": "State of the Union Address " + str(speech["year"]),
-        "FULL_TEXT": speech["text"],
-        "TYPE": TYPE,
-    }
-    data.append(this_speech)
- """

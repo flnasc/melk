@@ -5,6 +5,7 @@ import time
 import requests
 from requests_html import HTMLSession
 from bs4 import BeautifulSoup
+import logging
 
 # Gets API keys from apiconfig.py file on your machine.
 # This file must be created and filled in prior to use.
@@ -26,6 +27,8 @@ USER_LIMIT = apiconfig.nyt_user_limit
 def search_nyt(keyword, start_date, end_date, fields):
     # takes dates as date objects. searches with NYT Article Search API.
     # returns a pandas dataframe with collected articles in Melk format (see data dictionary).
+
+    logging.basicConfig(filename="melk.log", encoding="utf-8", level=logging.DEBUG)
 
     results_page = 0
     next_page = True
@@ -56,7 +59,9 @@ def search_nyt(keyword, start_date, end_date, fields):
 
     df = pd.DataFrame(data, columns=fields)
 
-    print("Success! Collected ", total_articles, " articles from The New York Times.")
+    logging.info(
+        "Success! Collected %s articles from The New York Times", total_articles
+    )
 
     return df
 
@@ -86,37 +91,18 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
     page_meta = requests.get(api_call)
     page_meta_list = json.loads(page_meta.text)
 
-    print("Downloading page ", results_page, " of NYT results....")
+    logging.info("Downloading page %s of NYT results....", results_page)
 
     for doc in page_meta_list["response"]["docs"]:
         if doc["document_type"] == "article":
-            parse_article_alt(doc, data, next_id)
+            parse_article(doc, data, next_id)
             articles_collected += 1
             next_id += 1
 
     return articles_collected
 
 
-# old method
-""" def parse_article(article, data, next_id):
-
-    this_article = {
-        "ID": next_id,
-        "SOURCE": SOURCE_NAME,
-        "SECTION": article["section_name"],
-        "SOURCE_URL": article["web_url"],
-        #'DATE': article['pub_date'],
-        "DATE": dt.datetime.fromisoformat(article["pub_date"].split("+")[0]),
-        "TITLE": article["headline"]["main"],
-        #'FULL_TEXT': scrape_content(article['web_url']),
-        "FULL_TEXT": scrape_body_text(article["web_url"]),
-        "TYPE": TYPE,
-    }
-
-    data.append(this_article) """
-
-
-def parse_article_alt(article, data, next_id):
+def parse_article(article, data, next_id):
 
     this_article = MelkRow(
         id=next_id,

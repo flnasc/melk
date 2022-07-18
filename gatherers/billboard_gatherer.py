@@ -3,6 +3,7 @@ import json
 import os
 import datetime as dt
 from format import MelkRow
+import logging
 
 SOURCE_NAME = "billboard"
 TYPE = "song"
@@ -14,6 +15,7 @@ def search_billboard(keyword, start_date, end_date, fields, path_to_dataset):
     files = os.listdir(path_to_dataset)
     data = []
     next_id = 0
+    logging.basicConfig(filename="melk.log", encoding="utf-8", level=logging.DEBUG)
 
     for file in files:
         # expects filenames to be in format YYYY.json
@@ -23,32 +25,19 @@ def search_billboard(keyword, start_date, end_date, fields, path_to_dataset):
                 songs = json.load(f)
                 for song in songs:
                     if keyword in song["lyrics"]:
-                        print("Collecting ", song["title"])
-                        collect_song_alt(song, data, next_id, year)
+                        # print("Collecting ", song["title"])
+                        collect_song(song, data, next_id, year)
                         next_id += 1
 
     df = pd.DataFrame(data, columns=fields)
+    logging.info(
+        "Success! Collected %s songs from Billboard Top 100 archives.", next_id
+    )
 
     return df
 
 
-""" # old method
 def collect_song(song, data, id, year):
-    this_song = {
-        "ID": id,
-        "SOURCE": SOURCE_NAME,
-        "SECTION": song["artist"],
-        "SOURCE_URL": "",
-        # puts Jan 1 as placeholder date to match format of other entries
-        "DATE": str(year) + "-01-01",
-        "TITLE": song["title"],
-        "FULL_TEXT": song["lyrics"],
-        "TYPE": TYPE,
-    }
-    data.append(this_song) """
-
-
-def collect_song_alt(song, data, id, year):
     this_song = MelkRow(
         id=id,
         source=SOURCE_NAME,
