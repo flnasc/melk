@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 from gatherers.nyt_gatherer import search_nyt
 from gatherers.poems_gatherer import search_poems
 from gatherers.reddit_gatherer import search_reddit
@@ -16,6 +17,7 @@ FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT",
 # gatherer(keyword, start_date, end_date, scope, sources)
 # expects keyword as single string
 # expects dates as strings in iso format [YYYY-MM-DD]
+#   start date must be before end date. 
 # expects sources as list of strings in any order
 # Under construction: expects limit as a dict showing how many items a user can retrieve from each source:
 #     example: {'new_york_times': 100, 'reddit': 2000}
@@ -29,8 +31,18 @@ FIELDS = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT",
 
 def gatherer(keyword, start_date, end_date, scope, sources):
 
-    start_date = dt.date.fromisoformat(start_date)
-    end_date = dt.date.fromisoformat(end_date)
+    # validate dates: must be in proper format and start date must be before end date
+    try:
+        start_date = dt.date.fromisoformat(start_date)
+        end_date = dt.date.fromisoformat(end_date)
+    except ValueError as error:
+        logging.critical(error)
+        raise ValueError(error)
+
+    if start_date >= end_date:
+        error = "Error. Start date must be before end date."
+        logging.critical(error)
+        raise ValueError(error)
 
     nyt = pd.DataFrame()
     reddit = pd.DataFrame()
@@ -105,18 +117,3 @@ def gatherer(keyword, start_date, end_date, scope, sources):
     df.to_csv(filename_out)
     return filename_out
 
-
-gatherer(
-    "whiskey",
-    "2022-06-20",
-    "2022-06-23",
-    "doc",
-    [
-        "new_york_times",
-        "reddit",
-        "poetry_foundation",
-        "twitter",
-        "state_of_the_union",
-        "billboard",
-    ],
-)
