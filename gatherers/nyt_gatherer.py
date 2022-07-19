@@ -13,6 +13,14 @@ import logging
 import apiconfig
 from format import MelkRow
 
+"""
+
+More/overall description. Note apiconfig. 
+
+    Typical usage example:
+    nyt_gatherer.search_nyt(keyword, start_date, end_date, fields)
+"""
+
 
 SOURCE_NAME = "new_york_times"
 TYPE = "article"
@@ -27,7 +35,22 @@ USER_LIMIT = apiconfig.nyt_user_limit
 def search_nyt(keyword, start_date, end_date, fields):
     # takes dates as date objects. searches with NYT Article Search API.
     # returns a pandas dataframe with collected articles in Melk format (see data dictionary).
+    """Summary.
 
+    More info. 
+
+    Args: 
+        keyword:
+        start_date:
+        end_date:
+        fields:
+    
+    Returns:
+        df: 
+    
+    Raises:
+        Any relevant exceptions
+    """
     logging.basicConfig(filename="melk.log", encoding="utf-8", level=logging.DEBUG)
 
     results_page = 0
@@ -67,6 +90,22 @@ def search_nyt(keyword, start_date, end_date, fields):
 
 
 def download_one_page(keyword, start_date, end_date, results_page, data, next_id):
+    """Summary.
+
+    More info. 
+
+    Args: 
+        keyword:
+        start_date:
+        end_date:
+        fields:
+    
+    Returns:
+        df: 
+    
+    Raises:
+        Any relevant exceptions
+    """
 
     articles_collected = 0
 
