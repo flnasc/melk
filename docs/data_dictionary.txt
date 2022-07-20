@@ -1,0 +1,129 @@
+Data Dictionary Draft 
+
+Note: Reddit posts are instances of Submissions as collected by PRAW. Submissions have CommentForests that list top level comments ordered by default sorting method. 
+
+Note: Poetry Foundation poems dataset. 13,000 poems, scraped by Divy Bramhecha https://www.kaggle.com/datasets/tgdivy/poetry-foundation-poems?resource=download
+
+
+id: (int)
+    Unique numerical identifier assigned by Melk on collection. Type: int. 
+
+source: (string) 
+    i.e. New York Times, Twitter, Reddit, Poetry Foundation, State of the Union archive,
+    Billboard Top 100 archive, etc. Assigned by Melk on collection. 
+
+section: (string) 
+    NYT: [section_name] (e.g. World, Sports, etc.)
+    Reddit post: [subreddit_name_prefixed] (e.g. r/ultralight)
+    Reddit comment: [subreddit_name_prefixed]
+    Twitter: N/A
+    PoetryFoundation: N/A
+    MediaCloud: [media_name] (Name of news outlet story scraped from). 
+    Genius: [artist_names] 
+    Wikipedia: ??
+    Apple App Store: Name of app being reviewed. Calculate from app id used in getting reviews. 
+    Google Play Store: Name of app being reviewed. Calculate during search process. 
+    StackOverflow question: N/A
+    StackOverflow answer: N/A
+    State of the Union archive: Name of president giving the speech. 
+    Billboard Top 100 archive: Name of artist. 
+
+source_URL: (string)
+    web link to page with the text. 
+    NYT: [web_url]
+    NYT downloader XML: N/A not recorded in XML but easily could be
+    Reddit post: [url]
+    Reddit comment: compute from [permalink], which does not include whole URL. 
+        ex: 'permalink': '/r/Ultralight/comments/uvudnd/rultralight_the_weekly_week_of_may_23_2022/i9xe9dr/'
+    Tweet: generated from [id] (this field is a unique Tweet id provided by Twitter)
+    PoetryFoundation: N/A
+    MediaCloud: [url]
+    Genius: [url] 
+    Apple App Store: [uri] Note: on my Mac, this link opens my music library/home page in iTunes
+    Google Play Store: N/A 
+    StackOverflow question: N/A
+    StackOverflow answer: N/A
+    State of the Union archive: N/A
+    Billboard Top 100 archive: N/A
+
+date: (Type: ??)
+    Date published or date posted. Use datetime module for python. 
+    NYT: Computed from [pub_date]
+        ex: "pub_date":"2022-05-20T20:18:45+0000"
+    NYT downloader XML: computed from [pub_date]
+        ex: 2000-12-01T05:00:00+0000
+    Reddit post: Computed from [created_utc] 
+        ex: 'created_utc': 1653289212.0
+    Reddit comment: Computed from [created_utc]
+    Tweet: Computed from [created_at]
+        ex: "created_at": "2019-06-04T23:12:08.000Z"
+    PoetryFoundation: N/A WARNING NOT FILTERABLE BY DATE
+    MediaCloud: Computed from [publish_date] 
+        ex. 2022-05-05 11:13:52
+    Genius: computed from [release_date]. 
+        ex. 2017-03-30
+    Wikipedia: WARNING NOT FILTERABLE BY DATE time of most recent revision in the download? [timestamp] 
+        ex. 2022-04-23T17:28:24Z
+    Apple App Store: Calculate from [updated]
+        ex. 2022-05-28T14:27:29-07:00
+    Google Play Store: compute from [comment -> last_modified]
+        stored as Timestamp object- seconds since Unix epoch (Midnight Jan 1 1970). 
+        Use first comment object only (main review, not replies)
+    StackOverflow question: computed from [creation_date]
+        ex. 1373429266
+    StackOverflow answer: computed from [creation_date]
+    Billboard Top 100 archive: Original source only contains year. Saved in Melk as YYYY-01-01, with Jan 1st
+        as a placeholder date to match formatting of the date field for other source types. 
+    State of the Union archive: Original source only contains year. Saved in Melk as YYYY-01-01, with Jan 1st
+        as a placeholder date to match formatting of the date field for other source types. 
+
+title: (string)
+    NYT: Article [headline -> main]
+    NYT downloader XML: [headline] 
+    Reddit post: [title] post title
+    Reddit comment: N/A / Null
+    Tweet: N/A / Null
+    PoetryFoundation: [title]  
+    MediaCloud: [title] article headline 
+    Genius: [title] 
+    Wikipedia: [title]
+    Apple App Store: [title]
+    Google Play Store: N/A
+    StackOverflow question: [title]
+    StackOverflow answer: [title] note: this is the same as the title of the question being answered
+    Billboard Top 100 archive: Song title
+    State of the Union archive: "State of the Union address YYYY"
+
+full_text: (string)
+    NYT: Full article text (extract from webURL?) 
+    NYT downloader XML: [content]
+    Reddit post: selftext of original post. [selftext]
+    Reddit comment: [body] 
+    Tweet: Text of a single tweet. [text] (UTF8- how does it handle emojis? images? links?)
+    PoetryFoundation: [poem] (note: includes lots of whitespace and formatting. Do we want this?)
+    MediaCloud: Full article text (extract from URL?)
+    Genius: Sing lyrics. Scrape from source url using https://chrishyland.github.io/scraping-from-genius/
+    Wikipedia: [text] (lots of formatting, links, structures- not raw)
+    Apple App Store: [content type="text"]
+    Google Play Store: [comment->text]
+    StackOverflow question: [body] note: includes HTML markup, blocks of code, links. 
+    StackOverflow answer: [body] note: same as above
+    Billboard Top 100 archive: song lyrics.
+    State of the Union archive: full text of speech.
+
+
+type: (string) 
+    NYT: all have type "article".  
+    Reddit post: "post". Assigned by Melk at collection 
+    Reddit comment: "comment". Assigned by Melk at collection 
+    Twitter: all have type "tweet" (should/can we collect whole threads?) 
+    PoetryFoundation: all have type "poem". 
+    MediaCloud: all have type "article". 
+    Genius: all have type "song".
+    Wikipedia: all have type "wiki_entry". 
+    Apple App Store: all have type "app_review". 
+    Google Play Store: all have type "app_review". 
+    StackOverflow question: "so_question".
+    StackOverflow answer: "so_answer". note: could also use post/comment types like Reddit
+    Billboard Top 100 archive: song
+    State of Union archive: speech
