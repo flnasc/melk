@@ -1,4 +1,5 @@
 """Collects relevant State of the Union speeches from local dataset. 
+
 Finds State of the Union speeches where the text contains the keyword 
 and the year of the speech is within the date range given. 
 Keyword search is exact and case sensitive. 
