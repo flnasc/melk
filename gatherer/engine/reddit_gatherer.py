@@ -1,3 +1,13 @@
+"""Provides methods for searching Pushshift Reddit archive.
+
+Searches for both posts and comments related to the keyword and within 
+specified date range. Using search_reddit() provides the full 
+functionality of the module. 
+
+    Typical usage example: 
+        reddit_data = reddit_gatherer.search_reddit(keyword, start_date, end_date, fields)
+"""
+
 from psaw import PushshiftAPI
 import pandas as pd
 import datetime as dt

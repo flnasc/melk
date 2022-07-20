@@ -1,3 +1,17 @@
+"""Uses NYT Article Search API to search and download New York Times articles related to keyword. 
+
+Note that a New York Times API key is required. The new_york_times_api_key variable in apiconfig.py
+    must be set as a string containing your API key, with authorization to use the Article Search API. 
+    More here: https://developer.nytimes.com/get-started
+
+Also note that the module will not download more than USER_LIMIT articles, where USER_LIMIT is also 
+defined in apiconfig.py as the variable "nyt_user_limit". While the NYT does not impose a cap on how many 
+articles an individual can download, it may be helpful to set this restriction to limit runtimes. 
+
+    Typical usage example:
+    nyt_data = nyt_gatherer.search_nyt(keyword, start_date, end_date, fields)
+        It is intended that you interface with this module primarily through the search_nyt() method. 
+"""
 import datetime as dt
 import pandas as pd
 import json
@@ -10,20 +24,6 @@ import logging
 import apiconfig
 from gatherer.engine.melk_format import MelkRow
 
-"""Uses NYT Article Search API to search and download New York Times articles related to keyword. 
-
-Note that a New York Times API key is required. The new_york_times_api_key variable in apiconfig.py
-    must be set as a string containing your API key, with authorization to use the Article Search API. 
-    More here: https://developer.nytimes.com/get-started
-
-Also note that the module will not download more than USER_LIMIT articles, where USER_LIMIT is also 
-defined in apiconfig.py as the variable "nyt_user_limit". While the NYT does not impose a cap on how many 
-articles an individual can download, it may be helpful to set this restriction to limit runtimes. 
-
-    Typical usage example:
-    nyt_gatherer.search_nyt(keyword, start_date, end_date, fields)
-        It is intended that you interface with this module primarily through the search_nyt() method. 
-"""
 
 SOURCE_NAME = "new_york_times"
 TYPE = "article"
@@ -143,7 +143,6 @@ def download_one_page(keyword, start_date, end_date, results_page, data, next_id
         logging.critical(error)
         raise RuntimeError(error)
 
-    print(page_meta.status_code)
     page_meta_list = json.loads(page_meta.text)
 
     logging.info("Downloading page %s of NYT results....", results_page)

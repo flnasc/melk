@@ -1,3 +1,14 @@
+"""Provides methods for searching Twitter Academic API. 
+
+Note that a Twitter academic API key is required to use this module. 
+Generate a bearer token and set search_tweets_bearer_token in the file 
+apiconfig.py as that bearer token, expressed as a string. More here:
+https://developer.twitter.com/en/products/twitter-api/academic-research
+
+    Typical usage example: 
+        twitter_data = twitter_gatherer.search_twitter(keyword, start_date, end_date, fields)
+"""
+
 import pandas as pd
 import datetime as dt
 import os
@@ -14,8 +25,24 @@ USER_LIMIT = apiconfig.twitter_user_limit
 
 
 def search_twitter(keyword, start_date, end_date, fields):
-    # takes dates as date objects. returns dataframe with collected tweets in Melk format
-    # as defined by fields, which is taken as a list ['ID', 'SOURCE', etc.] and must match.
+    """Uses Twitter's API v2 Search Tweets endpoint to search for relevant Tweets. 
+
+    Searches for Tweets related to the keyword and within the given date range. 
+    Note that each Twitter Academic API access account has a monthly limit of 
+    10 million Tweets per month. To help stay within this cap, search_twitter 
+    will only collect USER_LIMIT tweets, where USER_LIMIT is defined as 
+    twitter_user_limit within apiconfig.py.
+
+    Args: 
+        keyword: string to be searched for. Currently, only one word strings are explicitly supported. 
+        start_date: Datetime object representing first day of search period. 
+        end_date: Datetime object representing last day of search period.
+        fields: list of column headers for eventual csv database. 
+    
+    Returns:
+        df: a Pandas Dataframe (df) containing collected information about each relevant Tweet found.
+            Structured as defined in the file melk_format.py.
+    """
 
     logging.basicConfig(filename="melk.log", encoding="utf-8", level=logging.DEBUG)
 
@@ -29,9 +56,15 @@ def search_twitter(keyword, start_date, end_date, fields):
         tweet_fields="id,created_at,text",
     )
 
-    # load_credentials looks for credentials in environment variables, so we set them here
+    # load_credentials() looks for credentials in environment variables, so we set those here
     os.environ["SEARCHTWEETS_ENDPOINT"] = apiconfig.search_tweets_v2_endpoint
-    os.environ["SEARCHTWEETS_BEARER_TOKEN"] = apiconfig.search_tweets_bearer_token
+    try:
+        os.environ["SEARCHTWEETS_BEARER_TOKEN"] = apiconfig.search_tweets_bearer_token
+    except TypeError:
+        error = "Error. API key was not recognized in apiconfig.py. API key must be provided as a string. Ex: search_tweets_bearer_token = 'my_token'"
+        logging.critical(error)
+        raise TypeError(error)
+
     search_args = load_credentials()
 
     results_pages = collect_results(
@@ -55,6 +88,13 @@ def search_twitter(keyword, start_date, end_date, fields):
 
 
 def collect_tweet(tweet, data, tweets_collected):
+    """Converts information from one Tweet into melk format, appends it to data as dict.
+
+    Args:
+        tweet: tweet object for the tweet being collected. 
+        data: list of collected Tweets. 
+        tweets_collected: int, number of Tweets collected so far. 
+    """
     this_tweet = MelkRow(
         id=tweets_collected,
         source=SOURCE_NAME,

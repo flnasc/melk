@@ -2,6 +2,11 @@
 # one of the benefits of using a class here is that we can require certain fields as positional arguements,
 # and give default/empty values of "" to non-required fields.
 
+# Defining Melk format - see data dictionary for more info
+
+
+
+melk_fields = ["ID", "SOURCE", "SECTION", "SOURCE_URL", "DATE", "TITLE", "FULL_TEXT", "TYPE"]
 
 class MelkRow:
     def __init__(

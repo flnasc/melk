@@ -1,8 +1,8 @@
-# Poetry foundation engine
-# Takes keyword, melk format fields, and path to a csv dataset of 13,000 poems scraped from
-# poetryfoundation.org
-# returns a pandas dataframe with collected articles in Melk format (see data dictionary).
+"""Collects relevant poems from local dataset. 
 
+    Typical usage example: 
+        poems_data = poems_gatherer.search_poems(keyword, fields, path_to_dataset)
+"""
 import pandas as pd
 from gatherer.engine.melk_format import MelkRow
 
@@ -11,6 +11,18 @@ TYPE = "poem"
 
 
 def search_poems(keyword, fields, path_to_dataset):
+    """Searches local dataset for poems with keyword in their body text. 
+
+    Warning: unlike most sources, this one is NOT filterable by date. 
+    Any call to search_poems will return all poems within the dataset that contain 
+    the keyword (case insensitive). 
+
+    Args:
+        keyword: string to be searched for. Case insensitive, looks for exact matches otherwise.
+        fields: list of column headers for eventual csv database. 
+        path_to_dataset: location of the csv file containing full poetry dataset. 
+            Configured in apiconfig.py
+    """
 
     poems = pd.read_csv(path_to_dataset)
 
@@ -23,7 +35,17 @@ def search_poems(keyword, fields, path_to_dataset):
 
 
 def parse_poems(poems, fields):
-    # takes dataframe of poems, returns new df formatted in Melk format
+    """Creates dataframe of relevant poems in melk format, as defined in melk_format.py
+    
+    Args: 
+        poems: dataframe of entire original poems database
+        fields: list of column headers for eventual csv database.
+
+    Returns:
+        df: a Pandas Dataframe (df) containing collected information about each 
+        relevant poem. 
+            Structured as defined in the file melk_format.py
+    """
     poems = poems.reset_index()
 
     data = []
