@@ -1,9 +1,0 @@
-
-Function call: 
-
-gather(String keyword, string start_date [YYYY-MM-DD], string end_date [YYYY-MM-DD], string scope, string[] sources)
-
-Keyword: search term 
-Start/End dates: as per ISO standard 8601
-Scope: choose from “sentence” “paragraph” “document” 
-Sources: list of sources to search from. Choose from “new_york_times” and/or “reddit” 
