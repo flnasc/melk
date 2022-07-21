@@ -11,6 +11,11 @@ Project Melk is a tool that allows digital humanities instructors and students w
 The ultimate goal of this project is to make an important research method accessible to students and researchers without backgrounds in computer science. We hope it will enable professors to introduce their students to the novel insights enabled by computational analysis methods without requiring them to spend a prohibitively high amount of time wrestling with the mechanics of data collection. 
 
 ### Supported Sources 
+![The New York Times](https://developer.nytimes.com/files/poweredby_nytimes_150c.png?v=1583354208341)
+<img width="105" alt="Reddit Logo" src="https://user-images.githubusercontent.com/63132911/180308426-5033dbc5-c96f-4541-800b-0cec69a7e7aa.png">
+![2021 Twitter logo - blue](https://user-images.githubusercontent.com/63132911/180309613-de537691-68f4-4d8f-8a9e-2b7752a261e9.png)
+
+
 - The New York Times 
 - Reddit 
 - Twitter 
