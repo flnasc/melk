@@ -1,18 +1,22 @@
-# accepts CSV file from melk
-# saves cleaned data as a seperate file
+"""Provides text cleaning functions. Unfinished, not fully tested."""
 import pandas as pd
 import re
 
 
 def main(filename):
+    """Main cleaner function, does basic operations and manages calling optional helper functions.
+    
+    Args: 
+        filename: name/filepath of a csv file collected by the gatherer.
+    Returns:
+        filename: same as input, but the cleaned file is now saved at this location."""
     df = pd.read_csv(filename)
 
     # drop rows with no text
     df = df[df.FULL_TEXT.notnull()]
     df.dropna(subset=["FULL_TEXT"])
-    # df = df[clean(df.FULL_TEXT)]
 
-    # should switch to vectorized operation
+    # TODO switch to vectorized operation for optimal performance on very large files
     for i in range(len(df)):
 
         try:
@@ -23,24 +27,30 @@ def main(filename):
         except KeyError:
             pass
 
-        # How are we implementing the options system?
-        """if lower_flag:
+        """How are we implementing the options system? Here is an example using flags:
+        if lower_flag:
                 text = text.lower()
             if remove_hashtags_flag:
                 text = remove_hashtags(text)
             if remove_twitter_handles_flag:
                 text = remove_twitter_handles(text)"""
 
-    #  No such file or directory: 'clean_./outputs/metaverse_2022-05-01_2022-05-02.csv'
-    # filename_out = "clean_" + filename
-
     df.to_csv(filename)
     return filename
 
 
 def clean(text):
+    """Basic text cleaning.
+    
+    Removes newline characters, all occurrences of 2 or more spaces, hyperlinks, 
+    and all non-word characters.
+    
+    Args: 
+        text: string to be cleaned.
+    Returns: 
+        text: cleaned text. """
 
-    # print(text)
+
     # remove newlines
     text = re.sub(r"\n", " ", text)
     # remove all occurences of 2 or more spaces
@@ -50,12 +60,21 @@ def clean(text):
     # remove all non-word characters
     text = re.sub(r"\W+", " ", text)
 
-    # print(text)
     return text
 
 
 def remove_hashtags(text):
-    # this removes just the # character itself:
+    """Optional method to remove hashtags (especially useful for Twitter data).
+    Note that as written it removes only the '#' character, leaving the actual text of the tag.
+    E.g. '#TwitterHashtag' -> 'TwitterHashtag'.
+    
+    Args: 
+        text: string to be cleaned.
+    Returns: 
+        text: cleaned text.
+    """
+    
+    #  removes just the # character itself:
     text = re.sub(r"#", "", text)
 
     # to remove the entire #phrase, use this expression:
@@ -64,18 +83,12 @@ def remove_hashtags(text):
 
 
 def remove_twitter_handles(text):
-    # removes twitter handles
+    """Removes Twitter handles (usernames) from text. 
+
+    Args: 
+        text: string to be cleaned.
+    Returns: 
+        text: cleaned text."""
+
     text = re.sub(r"@\S+", "", text)
     return text
-
-
-def test():
-    # filename = "./outputs/whiskey_2022-06-20_2022-06-23.csv"
-    filename = "./outputs/clean_example.csv"
-    df = pd.read_csv(filename)
-    print("Before cleaning, ", len(df), " rows.")
-    main(filename)
-    df = pd.read_csv(filename)
-    print("After cleaning, ", len(df), " rows.")
-
-    return
