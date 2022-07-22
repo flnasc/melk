@@ -28,6 +28,21 @@ The ultimate goal of this project is to make an important research method access
 ### Usage
 Project Melk is primarily intended to be used via its web interface, which is currently under development. 
 
+However, you can also use the gatherer module on your computer to create datasets. Unlike the web interface, this will require some work using the command line and Python. Instructions for Mac: 
+
+#### Clone repository
+
+Open the terminal, then navigate to the folder you would like to download the melk program into. Clone this directory like so:
+
+```git clone https://github.com/flnasc/melk```
+
+#### Import required packages
+
+#### Run gatherer.py 
+
+This will create a csv file under the `outputs` folder in your working directory that contains your data. 
+
+
 
 
 
