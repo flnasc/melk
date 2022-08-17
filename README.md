@@ -28,23 +28,6 @@ The ultimate goal of this project is to make an important research method access
 ### Usage
 Project Melk is primarily intended to be used via its web interface, which is currently under development. 
 
-However, you can also use the gatherer module on your computer to create datasets. Unlike the web interface, this will require some work using the command line and Python. Instructions for Mac: 
-
-##### Clone repository
-
-Open the terminal, then navigate to the folder you would like to download the melk program into. Clone this directory like so:
-
-```git clone https://github.com/flnasc/melk```
-
-##### Import required packages
-
-##### Optional: Configure API keys 
-
-If you want to access sources (New York Times, Twitter) that require API keys, open the apiconfig.py file and enter your own API key and bearer token from those sources, then save the file. The Twitter gatherer expects an API key with Academic level access to be able to search the full Twitter archive. The gatherer will fail if you try to access sources that require an API key without providing one in apiconfig.py.
-
-##### Run gatherer.py 
-
-This will create a csv file under the `outputs` folder in your working directory that contains your data. 
 
 
 
