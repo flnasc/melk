@@ -1,0 +1,21 @@
+from project folder: 
+
+    Install package: pipenv install {packageName}
+
+    Run command in virtual environment: pipenv run {command}
+        Ex: pipenv run python3 testFile.py 
+    
+    Activate virtual environment in this shell: pipenv shell
+
+    Deactivate virtual; environment in this shell: deactivate
+    
+    Create list of installed packages: pip freeze > requirements.txt
+
+    Install packages listed in requirements: pip install -r requirements.txt
+
+    For now, check if the virtual environment is running by doing:
+        python3 testFile.py
+        If that does not work, not running (Requests package is not installed on system)
+
+To add pipenv to my path, I added the following line to /Users/{my_username}/.zprofile  
+PATH="$PATH:/Users/{my_username}/Library/Python/3.10/bin"
